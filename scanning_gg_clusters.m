@@ -35,15 +35,11 @@ pdf_med = pdf(rsk_func,med_pts);
 
 A = sparse([E(:,1);E(:,2)],[E(:,2);E(:,1)],pdf_med);
 
+%% Create mask above threshold
 
-% for i = 1:length(Z)-1
-%     for j = i+1: length(Z)
-%         disp([i, j])
-%         x = (X(i,:)+X(j,:))/2;
-%         pdf_med(i,j) = pdf(rsk_func,x);
-%         pdf_med(j,i) = pdf_med(i,j);
-%     end
-% end
+%% Detect connnected
+
+%% Calculate scan
 
 %cluster = scan_statistic(O, Ox, D, polyX, polyY);
 
