@@ -23,10 +23,9 @@ peaksZ = Z(is_greater);
 
 dt = delaunayTriangulation(X);
 E = dt.edges; % Arestas de Delaunay.
-B = sparse([E(:,1);E(:,2)],[E(:,2);E(:,1)],1);
-C = full(B);
+A = full(sparse([E(:,1);E(:,2)],[E(:,2);E(:,1)],1));
 
-[I,J,~] = find(C);
+[I,J,~] = find(A);
 med_pts = (X(I,:)+X(J,:))./2;
 pdf_med = zeros(length(Z));
 pdf_med(sub2ind(I,J)) = pdf(rsk_func,med_pts);
