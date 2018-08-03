@@ -23,7 +23,7 @@ for i=1:size(E,1)
     % Verificando se vai haver aresta entre v1 e v2.
     v1v2=d(v1,v2).^2 <= (d(v1,z).^2) + (d(v2,z).^2);
     
-    if (sum(v1v2) == length(v1v2)),
+    if (sum(v1v2) == length(v1v2))
         Gg(v1,v2)=1;
         Gg(v2,v1)=1;
     end
