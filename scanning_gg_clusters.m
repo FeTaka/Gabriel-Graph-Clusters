@@ -19,7 +19,7 @@ neighbours = bsxfun(@times,GG,Z');
 is_greater = all(bsxfun(@lt,neighbours,Z));
 peaksX = X(is_greater);
 peaksZ = Z(is_greater);
-
+peaksI = find(is_greater);
 
 dt = delaunayTriangulation(X);
 E = dt.edges; % Arestas de Delaunay.
@@ -36,12 +36,13 @@ pdf_med = pdf(rsk_func,med_pts);
 A = sparse([E(:,1);E(:,2)],[E(:,2);E(:,1)],pdf_med);
 
 threshold = peaksZ(1)*0.9;
-
+peak =  peaks(1)
 %% Create mask above threshold
-
+% mask = threshold_mask (A, threshold)
 %% Detect connnected
-
+% connected_graph = detect_connected_graph (mask, peak)
 %% Calculate scan
+% scan_statistic_val = scan_statistic_graph (connected_graph)
 
 %cluster = scan_statistic(O, Ox, D, polyX, polyY);
 
