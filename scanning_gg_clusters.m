@@ -36,25 +36,13 @@ pdf_med = pdf(rsk_func,med_pts);
 AP = sparse([E(:,1);E(:,2)],[E(:,2);E(:,1)],[pdf_med;pdf_med]);
 
 threshold = peaksZ(1)*0.9;
-peak =  peaks(1)
+peak =  peaks(1);
 
-
-
-%% Vou deixar aqui, mas não sei como continuar
-%%% Remove vetexes smaller than treshhold
-A_aux = AP;
-X_aux = X;
-ind = find(Z<level);
-X_aux(ind,:) = [];
-X_aux(:,ind) = [];
-A_aux(ind,:) = [];
-A_aux(:,ind) = [];
-
-A_aux(A_aux<level)=0;
-bins = conncomp(graph(A_aux))
 
 %% Create mask above threshold
-% mask = threshold_mask (AP, threshold)
+ mask = threshold_mask (AP, Z, threshold);
+ 
+ bins = conncomp(graph(mask));
 %% Detect connnected
 % connected_graph = detect_connected_graph (mask, peak)
 %% Calculate scan

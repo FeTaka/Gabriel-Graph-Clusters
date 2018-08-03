@@ -10,4 +10,16 @@
 %% of a syndrome in a region
 %% @end deftypefn
 %%
-function mask = threshold_mask (A, threshold)
+function mask = threshold_mask (AP, Z, level)
+%% Vou deixar aqui, mas não sei como continuar
+%%% Remove vetexes smaller than treshhold
+mask = AP;
+%X_aux = X;
+ind = find(Z<level);
+
+%X_aux(ind,:) = [];
+%X_aux(:,ind) = [];
+mask(ind,:) = 0;
+mask(:,ind) = 0;
+
+mask(mask<level)=0;
