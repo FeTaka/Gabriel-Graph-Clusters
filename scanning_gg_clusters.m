@@ -35,6 +35,8 @@ pdf_med = pdf(rsk_func,med_pts);
 
 A = sparse([E(:,1);E(:,2)],[E(:,2);E(:,1)],pdf_med);
 
+threshold = peaksZ(1)*0.9;
+
 %% Create mask above threshold
 
 %% Detect connnected
