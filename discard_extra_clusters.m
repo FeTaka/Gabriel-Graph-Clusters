@@ -10,7 +10,7 @@
 %% of a syndrome in a region
 %% @end deftypefn
 %%
-function [clusters,threshold] = discard_extra_clusters(C, D, T)
+function [clusters,threshold,llr] = discard_extra_clusters(C, D, T, llr)
 
 ratioT = sum(D==1)/length(D);
 
@@ -27,5 +27,6 @@ end
 
 
 T(remT==1)=[];
+llr(remT==1)=[];
 clusters = C;
 threshold = T;

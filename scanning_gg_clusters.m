@@ -10,7 +10,7 @@
 %% of a syndrome in a region
 %% @end deftypefn
 %%
-function [cluster_bin, saved_threshold] = scanning_gg_clusters (rsk_func, X, D, GG)
+function [cluster_bin, saved_threshold, llr] = scanning_gg_clusters (rsk_func, X, D, GG)
 
 Z = pdf(rsk_func,X); %risk estimates
 
@@ -39,6 +39,7 @@ AP = sparse([I;J],[J;I],[pdf_med;pdf_med]);
 [~,I] = sort(peaksZ, 'descend');
 
 saved_threshold = zeros(size(peaksZ));
+llr = zeros(size(peaksZ))- inf;
 valid = is_greater;
 cluster_bin = zeros(size(is_greater));
 cluster = 1;
@@ -47,14 +48,13 @@ for l=1:length(I)
     peak =  peaksI(id);
     if valid(peak)
         threshold = peaksZ(id);
-        cur_scan = - inf;
         scan_statistic_val = 0;
         connected_graph = 0;
-        while ((scan_statistic_val >= cur_scan)&&(threshold > minZ))
+        while ((scan_statistic_val >= llr(l))&&(threshold > minZ))
             cur_graph = connected_graph;
             saved_threshold(l)= threshold;
+            llr(l) = scan_statistic_val;
             threshold = threshold*0.8;
-            cur_scan = scan_statistic_val;
             %% Create mask above threshold
             mask = threshold_mask (AP, Z, threshold);
             mask(cluster_bin~=0, :) = 0;
@@ -74,4 +74,5 @@ for l=1:length(I)
         end
     end  
 end
+llr(saved_threshold==0) = [];
 saved_threshold(saved_threshold==0) = [];

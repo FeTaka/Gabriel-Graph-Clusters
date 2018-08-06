@@ -70,5 +70,7 @@ for i=1:length(A)
 end
 %%
 %% Output
+[~,reorder] = sort(random_order);
+Gg = Gg(reorder,reorder);
 rsk_func = obj;
 end
