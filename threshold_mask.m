@@ -23,3 +23,4 @@ mask(ind,:) = 0;
 mask(:,ind) = 0;
 
 mask(mask<level)=0;
+end

@@ -11,3 +11,8 @@
 %% @end deftypefn
 %%
 function connected_graph = detect_connected_graph (mask, peak)
+
+bins = conncomp(graph(mask));
+cur_bin = bins(peak);
+connected_graph = (bins==cur_bin);
+end

@@ -28,7 +28,41 @@ set(gcf, 'color', 'none');
 alpha(0.8); 
 saveas(h,'testes','png')
 
-C = scanning_gg_clusters (obj, X, D, gg);
+[C, T] = scanning_gg_clusters (obj, X, D, gg);
+[clusters, threshold] = discard_extra_clusters(C, D, T);
+[~, ~, ci, ~] = normfit(threshold, 0.05);
+clusters2 = zeros(size(clusters));
+clas_cluster = ones(size(threshold));
+clas_cluster = clas_cluster + (threshold < ci(1)) + (threshold < ci(2));
+U = unique(clusters);
+U(1) = [];
+for i=1:length(U)
+    clusters2(clusters==U(i))=clas_cluster(i);
+end
+%X = mapstd('reverse',Y,PS)
+
+
+colorvec = [[1 0 0]; [1 .5 0]; [1 1 0]];
+
+figure;
+[h]=ezcontour(@(x,y)pdf(obj,mapstd('apply',[x y]',ps)'),[0 -700],[0 700],100);
+hold on
+%[h] = fcontour(@(x,y)pdf(obj,mapstd('apply',[x y]',ps)'),[xmin, xmax, ymin, ymax], 'LevelList', [threshold(1)], 'LineColor', 'r');
+plot(Ox(clusters2==0, 1), Ox(clusters2==0, 2), '.k')
+plot(Ox(clusters2==1, 1), Ox(clusters2==1, 2), '.', 'color', colorvec(1,:))
+plot(Ox(clusters2==2, 1), Ox(clusters2==2, 2), '.', 'color', colorvec(2,:))
+plot(Ox(clusters2==3, 1), Ox(clusters2==3, 2), '.', 'color', colorvec(3,:))
+for i = 1:length(U)
+xmin = min(Ox(clusters==U(i),1));
+xmin = xmin - 10;
+ymin = min(Ox(clusters==U(i),2));
+ymin = ymin - 10;
+xmax = max(Ox(clusters==U(i),1));
+xmax = xmax + 10;
+ymax = max(Ox(clusters==U(i),2));
+ymax = ymax + 10;
+[h] = fcontour(@(x,y)pdf(obj,mapstd('apply',[x y]',ps)'),[xmin, xmax, ymin, ymax], 'LevelList', [threshold(i)], 'LineColor', colorvec(clas_cluster(i),:), 'LineWidth', 1.5);
+end
 % 
 % x = [-509, -389];
 % y = [550, 700];

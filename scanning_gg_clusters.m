@@ -10,45 +10,68 @@
 %% of a syndrome in a region
 %% @end deftypefn
 %%
-function cluster_zones = scanning_gg_clusters (rsk_func, X, D, GG)
+function [cluster_bin, saved_threshold] = scanning_gg_clusters (rsk_func, X, D, GG)
 
 Z = pdf(rsk_func,X); %risk estimates
 
+minZ = min(Z);
+
 %% Find peaks
 neighbours = bsxfun(@times,GG,Z');
-is_greater = all(bsxfun(@lt,neighbours,Z));
-peaksX = X(is_greater);
+is_greater = all((Z>neighbours),2)';
 peaksZ = Z(is_greater);
 peaksI = find(is_greater);
 
 dt = delaunayTriangulation(X);
 E = dt.edges; % Arestas de Delaunay.
 %A = full(sparse([E(:,1);E(:,2)],[E(:,2);E(:,1)],1));
-A = sparse([E(:,1)],[E(:,2)],1);
+A = sparse(E(:,1),E(:,2),1);
 
 [I,J,~] = find(A);
-med_pts = (X(I,:)+X(J,:))./2;
+med_pts = (X(I,:)+X(J,:))/2;
+
 %pdf_med = zeros(length(Z));
 %pdf_med(sub2ind(I,J)) = pdf(rsk_func,med_pts);
-pdf_med = zeros(nnz(A),1);
+%pdf_med = zeros(nnz(A),1);
+
 pdf_med = pdf(rsk_func,med_pts);
+AP = sparse([I;J],[J;I],[pdf_med;pdf_med]);
+[~,I] = sort(peaksZ, 'descend');
 
-AP = sparse([E(:,1);E(:,2)],[E(:,2);E(:,1)],[pdf_med;pdf_med]);
-
-threshold = peaksZ(1)*0.9;
-peak =  peaks(1);
-
-
-%% Create mask above threshold
- mask = threshold_mask (AP, Z, threshold);
- 
- bins = conncomp(graph(mask));
-%% Detect connnected
-% connected_graph = detect_connected_graph (mask, peak)
-%% Calculate scan
-% scan_statistic_val = scan_statistic_graph (connected_graph)
-
-%cluster = scan_statistic(O, Ox, D, polyX, polyY);
-
-
-cluster_zones = 0;
+saved_threshold = zeros(size(peaksZ));
+valid = is_greater;
+cluster_bin = zeros(size(is_greater));
+cluster = 1;
+for l=1:length(I)
+    id = I(l);
+    peak =  peaksI(id);
+    if valid(peak)
+        threshold = peaksZ(id);
+        cur_scan = - inf;
+        scan_statistic_val = 0;
+        connected_graph = 0;
+        while ((scan_statistic_val >= cur_scan)&&(threshold > minZ))
+            cur_graph = connected_graph;
+            saved_threshold(l)= threshold;
+            threshold = threshold*0.8;
+            cur_scan = scan_statistic_val;
+            %% Create mask above threshold
+            mask = threshold_mask (AP, Z, threshold);
+            mask(cluster_bin~=0, :) = 0;
+            mask(:, cluster_bin~=0) = 0;
+            %% Detect connnected
+            connected_graph = detect_connected_graph (mask, peak);
+            %% Calculate scan
+            scan_statistic_val = scan_statistic_graph (connected_graph, D);
+        end
+        if ~isnan(scan_statistic_val)
+            used = (is_greater & cur_graph);
+            cluster_bin(cur_graph & cluster_bin==0) = cluster;
+            valid = (valid & ~used);
+            cluster = cluster + 1;
+        else
+            saved_threshold(l)=0;
+        end
+    end  
+end
+saved_threshold(saved_threshold==0) = [];

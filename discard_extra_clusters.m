@@ -10,14 +10,22 @@
 %% of a syndrome in a region
 %% @end deftypefn
 %%
-function scan_statistic_val = scan_statistic_graph (connected_graph, D)
+function [clusters,threshold] = discard_extra_clusters(C, D, T)
 
-C = sum(D==1);%total cases
+ratioT = sum(D==1)/length(D);
 
-Sz = sum(connected_graph);%population in zone
-Cz = sum(D(connected_graph)==1); %cases in zone
+U = unique(C);
+U(1) = [];
+remT = zeros(size(U));
+for i = U
+    ratioI = sum(C==i & D'==1)/sum(C==i);
+    if ratioI <= ratioT
+        C(C==i) = 0;
+        remT(i)=1;
+    end
+end
 
-Mz = Sz*(C/length(D));
-Iz = Cz/Mz;
-Oz = (C-Cz)/(C - Mz);
-scan_statistic_val = log( (Iz)^Cz * (Oz)^(C-Cz));
+
+T(remT==1)=[];
+clusters = C;
+threshold = T;
