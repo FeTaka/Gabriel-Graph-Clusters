@@ -50,7 +50,7 @@ for l=1:length(I)
         threshold = peaksZ(id);
         scan_statistic_val = 0;
         connected_graph = 0;
-        while ((scan_statistic_val >= llr(l))&&(threshold > minZ))
+        while (threshold > minZ)
             cur_graph = connected_graph;
             saved_threshold(l)= threshold;
             llr(l) = scan_statistic_val;
