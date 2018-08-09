@@ -37,7 +37,7 @@ savefig('ggDengue')
 % alpha(0.8); 
 % saveas(h,'testes','png')
 
-[C, T, llr] = scanning_gg_clusters (obj, X, D, gg);
+[C, T, llr] = scanning_gg_clusters (obj, X, D, Gg);
 [clusters, threshold, llr] = discard_extra_clusters(C, D, T, llr);
 [~, ~, ci, ~] = normfit(llr, 0.05);
 clusters2 = zeros(size(clusters));
@@ -51,7 +51,7 @@ end
 
 %% Null hypothesis test
 N = 5;
-llrN = monte_carlo_llr_nh(obj, X, D, gg, N);
+llrN = monte_carlo_llr_nh(X, D,N);
 [mllr, illr] = max(llr);
 [ht,p,ci,stats] = ttest(llrN,mllr,'Alpha',0.05);
 %% Table

@@ -48,13 +48,8 @@ for l=1:length(I)
     peak =  peaksI(id);
     if valid(peak)
         threshold = peaksZ(id);
-        scan_statistic_val = 0;
-        connected_graph = 0;
+        step = threshold*0.1;
         while (threshold > minZ)
-            cur_graph = connected_graph;
-            saved_threshold(l)= threshold;
-            llr(l) = scan_statistic_val;
-            threshold = threshold*0.8;
             %% Create mask above threshold
             mask = threshold_mask (AP, Z, threshold);
             mask(cluster_bin~=0, :) = 0;
@@ -63,15 +58,20 @@ for l=1:length(I)
             connected_graph = detect_connected_graph (mask, peak);
             %% Calculate scan
             scan_statistic_val = scan_statistic_graph (connected_graph, D);
+            %% Save greater llr
+            if scan_statistic_val > llr(l)
+                cur_graph = connected_graph;
+                saved_threshold(l)= threshold;
+                llr(l) = scan_statistic_val;
+            end
+            threshold = threshold - step;
         end
-        if ~isnan(scan_statistic_val)
+        if saved_threshold(l)
             used = (is_greater & cur_graph);
             cluster_bin(cur_graph & cluster_bin==0) = cluster;
             valid = (valid & ~used);
             cluster = cluster + 1;
-        else
-            saved_threshold(l)=0;
-        end
+        end  
     end  
 end
 llr(saved_threshold==0) = [];
