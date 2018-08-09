@@ -12,7 +12,7 @@ D=D(m);
 Ox=Ox(m,:);
 %[pX, pYd] = runGrid(0.25, 0.50, Ix', Iy);
 
-[obj, Gg] = gg_probability_func (X, D, 0.01);
+[obj, Gg] = gg_probability_func (X, D, 0.001);
 
 gg_graph = graph(sparse(Gg));
 figure;
@@ -39,7 +39,7 @@ savefig('ggDengue')
 
 fprintf('\n:: Starting Scan Statistics...')
 [C, T, llr] = scanning_gg_clusters (obj, X, D, Gg);
-fprintf('\n:: Discarding extra clusters...\n')
+disp('\n:: Discarding extra clusters...')
 [clusters, threshold, llr] = discard_extra_clusters(C, D, T, llr);
 [~, ~, ci, ~] = normfit(llr, 0.05);
 clusters2 = zeros(size(clusters));
@@ -54,16 +54,17 @@ end
 % %% Null hypothesis test
 % N = 5;
 % llrN = monte_carlo_llr_nh(X, D,N);
-[mllr, illr] = max(llr);
+% [mllr, illr] = max(llr);
 % [ht,p,ci,stats] = ttest(llrN,mllr,'Alpha',0.05);
 % %% Table
 % Method = {'GGScan'};
-LLR = [mllr];
-N = [sum(D==1&clusters2'==illr)];
+% LLR = [mllr];
+% N = [sum(D==1&clusters2'==illr)];
 % p_value = [p];
 % 
 % T = table(LLR, N, p_value, 'RowNames', Method);
-colorvec = [[1 0 0]; [1 .5 0]; [1 1 0]];
+
+% colorvec = [[1 0 0]; [1 .5 0]; [1 1 0]];
 figure;
 [h]=ezcontour(@(x,y)pdf(obj,mapstd('apply',[x y]',ps)'),[0 -700],[0 700],100);
 hold on

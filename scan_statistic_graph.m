@@ -18,7 +18,7 @@ Sz = sum(connected_graph);%population in zone
 Cz = sum(D(connected_graph)==1); %cases in zone
 
 Mz = Sz*(C/length(D));
-if Mz < Cz
+if Mz <= Cz
     Iz = Cz/Mz;
     Oz = (C-Cz)/(C - Mz);
     scan_statistic_val = Cz*log(Iz) + (C - Cz)*log(Oz);
