@@ -48,19 +48,19 @@ U(1) = [];
 for i=1:length(U)
     clusters2(clusters==U(i))=clas_cluster(i);
 end
-
-%% Null hypothesis test
-N = 5;
-llrN = monte_carlo_llr_nh(X, D,N);
-[mllr, illr] = max(llr);
-[ht,p,ci,stats] = ttest(llrN,mllr,'Alpha',0.05);
-%% Table
-Method = {'GGScan'};
-LLR = [mllr];
-N = [sum(D==1&clusters2'==illr)];
-p_value = [p];
-
-T = table(LLR, N, p_value, 'RowNames', Method);
+% 
+% %% Null hypothesis test
+% N = 5;
+% llrN = monte_carlo_llr_nh(X, D,N);
+% [mllr, illr] = max(llr);
+% [ht,p,ci,stats] = ttest(llrN,mllr,'Alpha',0.05);
+% %% Table
+% Method = {'GGScan'};
+% LLR = [mllr];
+% N = [sum(D==1&clusters2'==illr)];
+% p_value = [p];
+% 
+% T = table(LLR, N, p_value, 'RowNames', Method);
 
 colorvec = [[1 0 0]; [1 .5 0]; [1 1 0]];
 figure;
