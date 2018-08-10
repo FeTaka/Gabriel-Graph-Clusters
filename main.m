@@ -12,11 +12,7 @@ D=D(m);
 Ox=Ox(m,:);
 %[pX, pYd] = runGrid(0.25, 0.50, Ix', Iy);
 
-<<<<<<< HEAD
-[obj, Gg] = gg_probability_func (X, D, 1);
-=======
 [obj, Gg] = gg_probability_func (X, D, 10);
->>>>>>> 7c12e7fb070a46662b7447bc1a260d9b03344e99
 
 gg_graph = graph(sparse(Gg));
 figure;
