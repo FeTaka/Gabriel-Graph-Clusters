@@ -12,7 +12,7 @@ D=D(m);
 Ox=Ox(m,:);
 %[pX, pYd] = runGrid(0.25, 0.50, Ix', Iy);
 
-[obj, Gg] = gg_probability_func (X, D, 10);
+[obj, Gg] = gg_probability_func (X, D, 0.1);
 
 gg_graph = graph(sparse(Gg));
 figure;
@@ -36,8 +36,9 @@ savefig('ggDengue')
 % [h]=ezcontour(@(x,y)pdf(obj, [x, y]),[0 -700],[0 800],1000);
 % alpha(0.8); 
 % saveas(h,'testes','png')
-
+fprintf("\n:: Scanning Clusters...")
 [C, T, llr] = scanning_gg_clusters (obj, X, D, Gg);
+fprintf("\n:: Discarding Clusters...\n")
 [clusters, threshold, llr] = discard_extra_clusters(C, D, T, llr);
 [~, ~, ci, ~] = normfit(llr, 0.05);
 clusters2 = zeros(size(clusters));
