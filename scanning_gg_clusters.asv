@@ -43,12 +43,12 @@ llr = zeros(size(peaksZ));
 valid = is_greater;
 cluster_bin = zeros(size(is_greater));
 cluster = 1;
-for l=1:1 %length(I)
+for l=1:length(I)
     id = I(l);
     peak =  peaksI(id);
     if valid(peak)
         threshold = peaksZ(id);
-        step = threshold*0.01;
+        step = threshold*0.1;
     %% Create mask above threshold
         mask = threshold_mask (AP, Z, threshold);
         mask(cluster_bin~=0, :) = 0;
@@ -82,6 +82,7 @@ for l=1:1 %length(I)
             cluster = cluster + 1;
         end  
     end 
+    pea
 end
 
 llr(saved_threshold==0) = [];
