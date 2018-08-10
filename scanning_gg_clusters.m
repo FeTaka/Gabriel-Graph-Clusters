@@ -39,7 +39,7 @@ AP = sparse([I;J],[J;I],[pdf_med;pdf_med]);
 [~,I] = sort(peaksZ, 'descend');
 
 saved_threshold = zeros(size(peaksZ));
-llr = zeros(size(peaksZ));
+llr = zeros(size(peaksZ))- inf;
 valid = is_greater;
 cluster_bin = zeros(size(is_greater));
 cluster = 1;
@@ -48,24 +48,13 @@ for l=1:length(I)
     peak =  peaksI(id);
     if valid(peak)
         threshold = peaksZ(id);
-        step = threshold*0.1;
-    %% Create mask above threshold
-        mask = threshold_mask (AP, Z, threshold);
-        mask(cluster_bin~=0, :) = 0;
-        mask(:, cluster_bin~=0) = 0;
-        %% Detect connnected
-        connected_graph = detect_connected_graph (mask, peak);
-        %% Calculate scan
-         scan_statistic_val = scan_statistic_graph (connected_graph, D);
-         llr(l) = scan_statistic_val;
-        while (threshold > minZ)
-            %% Save greater llr
-            if scan_statistic_val > llr(l)
-                cur_graph = connected_graph;
-                saved_threshold(l)= threshold;
-                llr(l) = scan_statistic_val;
-            end
-            threshold = threshold - step;
+        scan_statistic_val = 0;
+        connected_graph = 0;
+        while ((scan_statistic_val >= llr(l))&&(threshold > minZ))
+            cur_graph = connected_graph;
+            saved_threshold(l)= threshold;
+            llr(l) = scan_statistic_val;
+            threshold = threshold*0.8;
             %% Create mask above threshold
             mask = threshold_mask (AP, Z, threshold);
             mask(cluster_bin~=0, :) = 0;
@@ -75,12 +64,14 @@ for l=1:length(I)
             %% Calculate scan
             scan_statistic_val = scan_statistic_graph (connected_graph, D);
         end
-        if saved_threshold(l)
+        if ~isnan(scan_statistic_val)
             used = (is_greater & cur_graph);
             cluster_bin(cur_graph & cluster_bin==0) = cluster;
             valid = (valid & ~used);
             cluster = cluster + 1;
-        end  
+        else
+            saved_threshold(l)=0;
+        end
     end  
 end
 llr(saved_threshold==0) = [];
