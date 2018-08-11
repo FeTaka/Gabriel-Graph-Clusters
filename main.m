@@ -1,5 +1,3 @@
-
-
 [Ix, Iy] = dataRead(0);
 D=Iy;
 D(D==0)=-1;
@@ -36,9 +34,9 @@ savefig('ggDengue')
 % [h]=ezcontour(@(x,y)pdf(obj, [x, y]),[0 -700],[0 800],1000);
 % alpha(0.8); 
 % saveas(h,'testes','png')
-fprintf("\n:: Scanning Clusters...")
+fprintf('\n:: Scanning Clusters...')
 [C, T, llr] = scanning_gg_clusters (obj, X, D, Gg);
-fprintf("\n:: Discarding Clusters...\n")
+fprintf('\n:: Discarding Clusters...\n')
 [clusters, threshold, llr] = discard_extra_clusters(C, D, T, llr);
 [~, ~, ci, ~] = normfit(llr, 0.05);
 clusters2 = zeros(size(clusters));
@@ -62,6 +60,7 @@ end
 % p_value = [p];
 % 
 % T = table(LLR, N, p_value, 'RowNames', Method);
+save('plotData.mat', 'obj', 'ps', 'Ox', 'clusters2', 'clusters', 'threshold', 'clas_cluster')
 
 colorvec = [[1 0 0]; [1 .5 0]; [1 1 0]];
 figure;
@@ -86,9 +85,7 @@ end
 hold off
 saveas(h,'clusterDengue_data.eps','epsc')
 savefig('clusterDengue_data')
-
-
-
+save(data, obj, ps, Ox, clusters2, clusters)
 
 % 
 % x = [-509, -389];
