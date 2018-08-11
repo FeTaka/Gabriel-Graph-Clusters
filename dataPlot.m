@@ -1,15 +1,16 @@
-load('plotData.mat')
+%% This program is free software;
+%% 
+%% 
+%% -*- texinfo -*-
+%%
+
+load('PDF_function.mat')
+load('ZMatrix')
+load('clusterData.mat')
+
 colorvec = [[1 0 0]; [1 .5 0]; [1 1 0]];
 
-zfun = @(x,y)pdf(obj,mapstd('apply',[x y]',ps)');
-[p,q] = meshgrid(-700:1:0, 0:1:700);
-Z = zeros(71,71);
-step = 5;
-for i=0:step:700
-    for j=0:step:700
-        Z(i/step+1,j/step+1) = zfun(-700+i,j);
-    end
-end
+
 figure;
 [h]=ezcontour(@(x,y)pdf(obj,mapstd('apply',[x y]',ps)'),[0 -700],[0 700],100);
 hold on
@@ -46,4 +47,3 @@ hold off
 
 saveas(h,'clusterDengue_data.eps','epsc')
 savefig('clusterDengue_data')
-save(data, obj, ps, Ox, clusters2, clusters)

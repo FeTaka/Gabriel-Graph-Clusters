@@ -1,6 +1,6 @@
 %% This program is free software;
-%% 
-%% 
+%% It consists of the third final step of the work discribed in...
+%% Steps 1 and 2 are mde in function gg_probability_func
 %% -*- texinfo -*-
 %%
 
@@ -30,7 +30,19 @@ savefig('ggDengue')
 save('PDF_function.mat', 'obj', 'Gg', 'Ox', 'X', 'ps')
 
 
-
+fprintf('\n:: Scanning Clusters...')
+[C, T, llr] = scanning_gg_clusters (obj, X, D, Gg);
+fprintf('\n:: Discarding Clusters...\n')
+[clusters, threshold, llr] = discard_extra_clusters(C, D, T, llr);
+[~, ~, ci, ~] = normfit(llr, 0.05);
+clusters2 = zeros(size(clusters));
+clas_cluster = ones(size(llr));
+clas_cluster = clas_cluster + (llr < ci(1)) + (llr < ci(2));
+U = unique(clusters);
+U(1) = [];
+for i=1:length(U)
+    clusters2(clusters==U(i))=clas_cluster(i);
+end
 
 
 % %% Null hypothesis test
@@ -46,6 +58,6 @@ save('PDF_function.mat', 'obj', 'Gg', 'Ox', 'X', 'ps')
 % 
 % T = table(LLR, N, p_value, 'RowNames', Method);
 
-
+save('clusterData.mat', 'clusters2', 'clusters', 'threshold', 'clas_cluster')
 
 

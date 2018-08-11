@@ -1,6 +1,6 @@
 %% This program is free software;
-%% 
-%% 
+%% Main File of the First Part of the Paper
+%% Implementation of the PDF according to Gabriel Graphs Method
 %% -*- texinfo -*-
 %%
 
@@ -17,6 +17,8 @@ Ox=Ox(m,:);
 
 [obj, Gg] = gg_probability_func (X, D, 0.1);
 
+fprintf('\n');
+
 gg_graph = graph(sparse(Gg));
 figure;
 h=plot(gg_graph, 'xData', Ox(:,1), 'yData', Ox(:,2));
@@ -27,24 +29,7 @@ hold off
 saveas(h,'ggDengue.eps','epsc')
 savefig('ggDengue')
 
-save('PDF_function.mat', 'obj', 'Gg', 'Ox', 'X', 'ps')
-
-
-
-
-
-% %% Null hypothesis test
-% N = 5;
-% llrN = monte_carlo_llr_nh(X, D,N);
-% [mllr, illr] = max(llr);
-% [ht,p,ci,stats] = ttest(llrN,mllr,'Alpha',0.05);
-% %% Table
-% Method = {'GGScan'};
-% LLR = [mllr];
-% N = [sum(D==1&clusters2'==illr)];
-% p_value = [p];
-% 
-% T = table(LLR, N, p_value, 'RowNames', Method);
+save('PDF_function.mat', 'obj', 'Gg', 'Ox', 'X', 'D', 'ps')
 
 
 
