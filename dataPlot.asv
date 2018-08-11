@@ -6,7 +6,7 @@
 
 %% Load Varaibles
 load('PDF_function.mat')
-%load('ZMatrix')
+load('ZMatrix')
 load('clusterData.mat')
 
 %% Create a Color Vector
@@ -19,15 +19,14 @@ figure;
 hold on
 
     %[h] = fcontour(@(x,y)pdf(obj,mapstd('apply',[x y]',ps)'),...
-    %[xmin, xmax, ymin, ymax], 'LevelList', [threshold(1)],... 
-    %'LineColor','r');
-    
+    %[xmin, xmax, ymin, ymax], 'LevelList', [threshold(1)],... 'LineColor',
+    %'r');
 plot(Ox(clusters2==0, 1), Ox(clusters2==0, 2), '.k')
 plot(Ox(clusters2==1, 1), Ox(clusters2==1, 2), '.', 'color', colorvec(1,:))
 plot(Ox(clusters2==2, 1), Ox(clusters2==2, 2), '.', 'color', colorvec(2,:))
 plot(Ox(clusters2==3, 1), Ox(clusters2==3, 2), '.', 'color', colorvec(3,:))
 
-%% Plot Clusters Borders
+
 for i = 1:length(U)
 xmin = min(Ox(clusters==U(i),1));
 xmin = xmin - 10;
@@ -52,6 +51,5 @@ contour(-700:10:0, 0:10:700, (Z.*M)', threshold(i), 'lineWidth', 3, 'color', col
 end
 hold off
 
-%% SAve Images
 saveas(h,'clusterDengue_data.eps','epsc')
 savefig('clusterDengue_data')
