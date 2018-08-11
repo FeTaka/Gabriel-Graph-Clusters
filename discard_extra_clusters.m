@@ -25,7 +25,6 @@ for i = U
     end
 end
 
-
 T(remT==1)=[];
 llr(remT==1)=[];
 clusters = C;

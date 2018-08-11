@@ -32,7 +32,7 @@ random_order = randperm(length(D));
 X = X(random_order, :);
 D = D(random_order);
 [edge,d,Gg]=Grafo_Gabriel(X,D);
-vertices_edges=find(edge==1 & D == 1);
+vertices_edges=find(edge==1);
 %%
 %% Mixture Model
 fprintf('\n:: Calculating Mixture...')
@@ -46,7 +46,7 @@ dist_centers = d.*Gg;
 
 for i=1:length(vertices_edges)
     c = vertices_edges(i);
-    r = mean(dist_centers(c,dist_centers(c,:)>0));
+    r = min(dist_centers(c,dist_centers(c,:)>0));
     %r = sum(dist_centers(c,:));
     mu(i,:) = [X(c,1), X(c,2)];
     sigma(:,:,i) = eye(2).*r;

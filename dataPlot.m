@@ -5,7 +5,7 @@
 %%
 
 load('PDF_function.mat')
-load('ZMatrix')
+%load('ZMatrix')
 load('clusterData.mat')
 
 colorvec = [[1 0 0]; [1 .5 0]; [1 1 0]];
