@@ -72,5 +72,6 @@ end
 %% Output
 [~,reorder] = sort(random_order);
 Gg = Gg(reorder,reorder);
+sum()
 rsk_func = obj;
 end

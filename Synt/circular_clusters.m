@@ -6,7 +6,7 @@ N = 100;
 
 x1 = -9:0.5:9; x2 = -9:0.5:9;
 [X1,X2] = meshgrid(x1,x2);
-Sigma = [2 0; 0 2];
+Sigma = [3 0; 0 3];
 mu = [0 0];
 
 %% Outputs
@@ -29,9 +29,10 @@ for i =1:N
 
     %method
     obj = gg_probability_func(X, D');
+    rsk_func = @(X)(pdf(obj, X')/obj.NumComponents);
 
     pdfO = mvnpdf(OX, mu, Sigma);
-    pdfE = pdf(obj, mapstd('apply', OX', px)');
+    pdfE = rsk_func(mapstd('apply', OX', px));
     d_js = jensen_shannon(pdfO, pdfE);
     d_js1 = jensen_shannon(pdfO, ones(size(pdfO)));
     d_js0 = jensen_shannon(pdfO, zeros(size(pdfO)));
@@ -47,7 +48,7 @@ save('data_circular_cluster','r_js')
 x1 = -9:0.5:9; x2 = -9:0.5:9;
 [X1,X2] = meshgrid(x1,x2);
 selX = randperm(numel(X1));
-Sigma = [2 0; 0 2];
+Sigma = [3 0; 0 3];
 mu = [0 0];
 
 OX = [X1(:) X2(:)];
@@ -64,6 +65,7 @@ D(R < F) = 1;
 
 %method
 obj = gg_probability_func(X, D');
+rsk_func = @(X)(pdf(obj, X')/10);
 
 figure;
 plot(OX(D==1,1), OX(D==1,2), '.k')
@@ -78,7 +80,7 @@ plot(OX(D==-1,1), OX(D==-1,2), '.r')
 hold on
 plot(OX(D==1,1), OX(D==1,2), '.k')
 
-h(2)=ezcontour(@(x,y)pdf(obj,mapstd('apply',[x y]',px)'),[-10 10],[-10 10],100);
+h(2)=ezcontour(@(x,y)rsk_func(mapstd('apply',[x y]',px)),[-10 10],[-10 10],100);
         %set(h,'edgecolor','none')
         colormap autumn
 hold off
@@ -88,9 +90,9 @@ figure;
 Z=arrayfun(@(x,y)mvnpdf([x y],mu,Sigma),X1, X2);
 plot(max(Z)', 'b')
 hold on
-Z=arrayfun(@(x,y)pdf(obj,mapstd('apply',[x y]',px)'),X1, X2);
+Z=arrayfun(@(x,y)rsk_func(mapstd('apply',[x y]',px)),X1, X2);
 plot(max(Z)', 'r')
 
 pdfO = mvnpdf(OX,mu,Sigma);
-pdfE = pdf(obj, mapstd('apply', OX', px)');
+pdfE = rsk_func(mapstd('apply', OX', px));
 d_js = jensen_shannon(pdfO, pdfE);
