@@ -12,7 +12,7 @@
 %%
 function [cluster_bin, saved_threshold, llr] = scanning_gg_clusters (rsk_func, X, D, GG)
 
-Z = pdf(rsk_func,X); %risk estimates
+Z = pdf(rsk_func,X)/10; %risk estimates
 
 minZ = min(Z);
 
@@ -54,7 +54,7 @@ for l=1:length(I)
             cur_graph = connected_graph;
             saved_threshold(l)= threshold;
             llr(l) = scan_statistic_val;
-            threshold = threshold*0.8;
+            threshold = threshold*0.99;
             %% Create mask above threshold
             mask = threshold_mask (AP, Z, threshold);
             mask(cluster_bin~=0, :) = 0;

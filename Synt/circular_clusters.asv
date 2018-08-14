@@ -10,11 +10,11 @@ Sigma = [3 0; 0 3];
 mu = [0 0];
 
 %% Outputs
-r_js = zeros(4,N);%resultado jensen shannon
+r_js = zeros(2,N);%resultado jensen shannon
 
 
 %% Test loop
-for i =1:N
+for i =1:1
     
     OX = [X1(:) X2(:)];
     [X, px]= mapstd(OX');
@@ -28,17 +28,28 @@ for i =1:N
     D(R < F) = 1;
 
     %method
-    obj = gg_probability_func(X, D');
-    rsk_func = @(X)(pdf(obj, X')/obj.NumComponents);
+    [obj, Gg] = gg_probability_func(X, D');
+    rsk_func = @(X)(pdf(obj, X')/10);
 
     pdfO = mvnpdf(OX, mu, Sigma);
     pdfE = rsk_func(mapstd('apply', OX', px));
     d_js = jensen_shannon(pdfO, pdfE);
-    d_js1 = jensen_shannon(pdfO, ones(size(pdfO)));
-    d_js0 = jensen_shannon(pdfO, zeros(size(pdfO)));
-    d_jsU = jensen_shannon(pdfO, rand(size(pdfO)));
-    r_js(:,i) = [d_js; d_js1; d_js0; d_jsU];
+    %d_js1 = jensen_shannon(pdfO, ones(size(pdfO)));
+    %d_js0 = jensen_shannon(pdfO, zeros(size(pdfO)));
+    d_jsR = jensen_shannon(pdfO, rand(size(pdfO)));
+    %r_js(:,i) = [d_js; d_js1; d_js0; d_jsR];
+    r_js(:,i) = [d_js;d_jsR];
     
+    fprintf('\n:: Scanning Clusters...')
+    [C, T, L] = scanning_gg_clusters (obj, X, D, Gg);
+    fprintf('\n:: Discarding Clusters...\n')
+    [clusters, threshold, llr] = discard_extra_clusters(C, D, T, L);
+    [~, id] = max(llr);
+    dataE = clusters==id;
+    dataR = realPoints(OX, mu, Sigma);
+    ppv_val = ppv(dataR, dataE);
+    sensitivity_val = sensitivity(dataR, dataE);
+
 end
 save('data_circular_cluster','r_js')
 
