@@ -36,8 +36,8 @@ for i =1:N
     d_js = jensen_shannon(pdfO, pdfE);
     d_js1 = jensen_shannon(pdfO, ones(size(pdfO)));
     d_js0 = jensen_shannon(pdfO, zeros(size(pdfO)));
-    d_jsU = jensen_shannon(pdfO, rand(size(pdfO)));
-    r_js(:,i) = [d_js; d_js1; d_js0; d_jsU];
+    d_jsR = jensen_shannon(pdfO, rand(size(pdfO)));
+    r_js(:,i) = [d_js; d_js1; d_js0; d_jsR];
     
 end
 save('data_circular_cluster','r_js')
