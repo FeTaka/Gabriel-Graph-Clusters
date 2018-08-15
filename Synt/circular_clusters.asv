@@ -82,15 +82,12 @@ D(R < F) = 1;
 [obj, Gg] = gg_probability_func(X, D');
 rsk_func = @(X)(pdf(obj, X')*sqrt(px.gain'*px.gain)/2);
 
-zfun = @(x,y)rsk_func(mapstd('apply',[x y]',px));
-xi = -5:0.5:5; xj = -5:0.5:5;
-Zp = zeros(length(xi),length(xj));
-Zo = zeros(length(xi),length(xj));
+zfun = @(x,y)mapstd('apply',[x y]',ps)');
+Zp = zeros(length(x1),length(x2));
 step = 1;
-for i=1:step:length(xi)
-    for j=1:step:length(xj)
-        Zp(i,j) = zfun(xi(i),xj(j));
-        Zo(i,j) = mvnpdf([xi(i),xj(j)],mu,Sigma);
+for i=0:step:length(x1)
+    for j=0:step:length(x2)
+        Z(i/step+1,j/step+1) = rsk_func(-700+i,j);
     end
 end
 
@@ -99,9 +96,9 @@ plot(OX(D==-1,1), OX(D==-1,2), '.k', 'MarkerSize',5)
 hold on
 plot(OX(D==1,1), OX(D==1,2), '.r', 'MarkerSize',5)
 hold on
-h=contour([-5:0.5:5], [-5:0.5:5],Zo);
+h(2)=fcontour(@(x,y)mvnpdf([x y],mu,Sigma),[-10 10 -10 10]);
         %set(h,'edgecolor','none')
-        contourcmap('winter')
+        colormap winter
 hold off
 
 figure;
@@ -109,9 +106,9 @@ plot(OX(D==-1,1), OX(D==-1,2), '.k', 'MarkerSize',5)
 hold on
 plot(OX(D==1,1), OX(D==1,2), '.r', 'MarkerSize',5)
 
-h=contour(-5:0.5:5, -5:0.5:5,Zp);
+h(2)=fcontour(@(x,y)rsk_func(mapstd('apply',[x y]',px)),[-10 10 -10 10]);
         %set(h,'edgecolor','none')
-        contourcmap('autumn')
+        colormap autumn
 hold off
 
 
@@ -146,22 +143,21 @@ plot(OX(D==-1,1), OX(D==-1,2), '.k', 'MarkerSize',5)
 plot(OX(D==1,1), OX(D==1,2), '.r', 'MarkerSize',5)
 
 xmin = min(OX(clusters==id,1));
-%xmin = xmin - 1;
-xmin = round((xmin+5)/0.5);
+xmin = xmin - 10;
+xmin = round((xmin+700)/step);
 ymin = min(OX(clusters==id,2));
-%ymin = ymin - 1;
-ymin = round((ymin+5)/0.5);
+ymin = ymin - 10;
+ymin = round(ymin/step);
 xmax = max(OX(clusters==id,1));
-%xmax = xmax + 1;
-xmax = round((xmax+5)/0.5);
+xmax = xmax + 10;
+xmax = round((xmax+700)/step);
 ymax = max(OX(clusters==id,2));
-%ymax = ymax + 1;
-ymax = round(ymax+5/step);
-M = ones(size(Zp));
+ymax = ymax + 10;
+ymax = round(ymax/step);
+M = ones(size(Z));
 M(1:xmin, :) = 0;
 M(xmax:end, :) = 0;
 M(:, 1:ymin) = 0;
 M(:, ymax:end) = 0;
-M=M+1;
-contour(-5:0.5:5, -5:0.5:5, (Zp.*M)', threshold(id), 'lineWidth', 3)
+contour(-5:0.1:5, -5:0.1:5, (Zp.*M)', threshold(id), 'lineWidth', 3, 'color', 'r')
 

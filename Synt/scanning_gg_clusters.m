@@ -12,13 +12,13 @@
 %%
 function [cluster_bin, saved_threshold, llr] = scanning_gg_clusters (rsk_func, X, D, GG)
 
-Z = pdf(rsk_func,X)/10; %risk estimates
+Z = rsk_func(X'); %risk estimates
 
 minZ = min(Z);
 
 %% Find peaks
 neighbours = bsxfun(@times,GG,Z');
-is_greater = all((Z>neighbours),2)';
+is_greater = all((repmat(Z,1,length(Z))>neighbours),2)';
 peaksZ = Z(is_greater);
 peaksI = find(is_greater);
 
@@ -34,7 +34,7 @@ med_pts = (X(I,:)+X(J,:))/2;
 %pdf_med(sub2ind(I,J)) = pdf(rsk_func,med_pts);
 %pdf_med = zeros(nnz(A),1);
 
-pdf_med = pdf(rsk_func,med_pts);
+pdf_med = rsk_func(med_pts');
 AP = sparse([I;J],[J;I],[pdf_med;pdf_med]);
 [~,I] = sort(peaksZ, 'descend');
 

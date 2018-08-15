@@ -70,6 +70,9 @@ D(R < F) = 1;
 obj = gg_probability_func(X, D', [0.1]);
 rsk_func = @(X)(pdf(obj, X')/10);
 
+
+
+
 figure;
 plot(OX(D==1,1), OX(D==1,2), '.k')
 hold on
@@ -97,6 +100,6 @@ Z=arrayfun(@(x,y)rsk_func(mapstd('apply',[x y]',px)),X1, X2);
 plot(max(Z)', 'r')
 
 pdfO = pdf(f_fun, OX);
-pdfE = rsk_func(mapstd('apply', OX', px));;
+pdfE = rsk_func(mapstd('apply', OX', px));
 d_js = jensen_shannon(pdfO, pdfE);
 
