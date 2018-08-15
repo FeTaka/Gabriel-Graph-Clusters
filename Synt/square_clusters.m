@@ -1,7 +1,7 @@
 
 
 %% Sample parameters
-N = 10;
+N = 1000;
 %nd = randi([2 5], 1, N); %number of functions
 
 x1 = -5:0.1:5; x2 = -5:0.1:5;

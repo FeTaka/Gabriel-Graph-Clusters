@@ -6,7 +6,7 @@
 
 %% Load Varaibles
 load('PDF_function.mat')
-%load('ZMatrix')
+load('ZMatrix')
 load('clusterData.mat')
 
 %% Create a Color Vector
@@ -28,6 +28,9 @@ plot(Ox(clusters2==2, 1), Ox(clusters2==2, 2), '.', 'color', colorvec(2,:))
 plot(Ox(clusters2==3, 1), Ox(clusters2==3, 2), '.', 'color', colorvec(3,:))
 
 %% Plot Clusters Borders
+step = 1;
+U = unique(clusters);
+U(1) = [];
 for i = 1:length(U)
 xmin = min(Ox(clusters==U(i),1));
 xmin = xmin - 10;
@@ -47,7 +50,7 @@ M(xmax:end, :) = 0;
 M(:, 1:ymin) = 0;
 M(:, ymax:end) = 0;
 l = clas_cluster(U(i));
-contour(-700:10:0, 0:10:700, (Z.*M)', threshold(i), 'lineWidth', 3, 'color', colorvec(l,:))
+contour(-700:step:0, 0:step:700, (Z.*M)', [threshold(i), threshold(i)], 'lineWidth', 3, 'color', colorvec(l,:))
 %[h] = ezcontour(@(x,y)pdf(obj,mapstd('apply',[x y]',ps)'),[xmin, xmax, ymin, ymax]);
 end
 hold off

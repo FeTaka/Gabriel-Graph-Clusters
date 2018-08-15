@@ -12,7 +12,7 @@
 %%
 function [cluster_bin, saved_threshold, llr] = scanning_gg_clusters (rsk_func, X, D, GG)
 
-Z = pdf(rsk_func,X)/10; %risk estimates
+Z = pdf(rsk_func,X); %risk estimates
 
 minZ = min(Z);
 
