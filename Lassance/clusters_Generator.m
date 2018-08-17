@@ -34,7 +34,7 @@ for i=1:length(U)
      N2(i,:) = [illr(i), llr(illr(i)), sum(D==1&clusters'==U(illr(i))), sum(clusters'==U(illr(i)))];
 end
 
-save('clusterData.mat', 'clusters2', 'clusters', 'threshold', 'clas_cluster')
+save('clusterData.mat', 'clusters2', 'clusters', 'threshold', 'clas_cluster', 'llr')
 
 
 % %% Null hypothesis test

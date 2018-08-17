@@ -1,0 +1,32 @@
+\begin{picture}(0,0)%
+\includegraphics{D:/Users/Fernanda/Documents/GitHub/Gabriel-Graph-Clusters/Synt/images/cluster_shape_2_temp.eps}%
+\end{picture}%
+%
+%  Created by WinFIG version 7.5 
+%  METADATA <version>1.0</version> 
+%
+\setlength{\unitlength}{3947sp}%
+%
+\begingroup\makeatletter\ifx\SetFigFont\undefined%
+\gdef\SetFigFont#1#2#3#4#5{%
+  \reset@font\fontsize{#1}{#2pt}%
+  \fontfamily{#3}\fontseries{#4}\fontshape{#5}%
+  \selectfont}%
+\fi\endgroup%
+\begin{picture}(7106,8587)(3537,-11279)
+%  METADATA <id>14</id> 
+\put(5316,-3841){\makebox(0,0)[b]{\smash{{\SetFigFont{14}{16.8}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}sd}%
+}}}}
+%  METADATA <id>15</id> 
+\put(4725,-4122){\makebox(0,0)[b]{\smash{{\SetFigFont{14}{16.8}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$\mu$}%
+}}}}
+%  METADATA <id>18</id> 
+\put(4725,-5539){\makebox(0,0)[b]{\smash{{\SetFigFont{20}{24.0}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}Circular}%
+}}}}
+%  METADATA <id>20</id> 
+\put(9450,-5539){\makebox(0,0)[b]{\smash{{\SetFigFont{20}{24.0}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}Square}%
+}}}}
+%  METADATA <id>28</id> 
+\put(7088,-11161){\makebox(0,0)[b]{\smash{{\SetFigFont{20}{24.0}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}Irregular}%
+}}}}
+\end{picture}%
