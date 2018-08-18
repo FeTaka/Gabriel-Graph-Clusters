@@ -12,10 +12,12 @@ f_fun = gmdistribution(Mu,Sigma,[ones(size(Mu,1)-1,1);0.5]);
 %% Outputs
 r_js = zeros(2,N);%resultado jensen shannon
 cluster_qlt = zeros(3,N);
-
+previous_fails = failed_num;
+failed = 0;
+failed_num = [];
 %% Test loop
-for i =1:N
-    
+for i = 1:N
+    selX = randperm(numel(X1));
     OX = [X1(:) X2(:)];
     OX = OX(selX(1:500),:);
     [X, px]= mapstd(OX');
@@ -30,7 +32,7 @@ for i =1:N
     D(R < F) = 1;
     
     %method
-    [obj, Gg] = gg_probability_func(X, D', 0.01);
+    [obj, Gg] = gg_probability_func(X, D', 0.05);
     rsk_func = @(X)(pdf(obj, X')*sqrt(px.gain'*px.gain)/2);
     
     pdfO = pdf(f_fun,OX);
@@ -44,15 +46,20 @@ for i =1:N
     
     fprintf('\n:: Scanning Clusters...')
     [C, T, L] = scanning_gg_clusters (rsk_func, X, D, Gg);
-    fprintf('\n:: Discarding Clusters...\n')
-    [clusters, threshold, llr] = discard_extra_clusters(C, D', T, L);
-    [~, id] = max(llr);
-    dataE = clusters'==id;
-    dataR = realPointsI(OX, Mu, Sigma);
-    ppv_val = ppv(dataR, dataE);
-    sensitivity_val = sensitivity(dataR, dataE);
-    specificity_val = specificity(dataR, dataE);
-    cluster_qlt(:,i) = [ppv_val; sensitivity_val; specificity_val];
+    if ~isempty(L)
+        fprintf('\n:: Discarding Clusters...\n')
+        [clusters, threshold, llr] = discard_extra_clusters(C, D', T, L);
+        [~, id] = max(llr);
+        dataE = clusters'==id;
+        dataR = realPointsI(OX, Mu, Sigma);
+        ppv_val = ppv(dataR, dataE);
+        sensitivity_val = sensitivity(dataR, dataE);
+        specificity_val = specificity(dataR, dataE);
+        cluster_qlt(:,i) = [ppv_val; sensitivity_val; specificity_val];
+    else
+        failed = failed +1;
+        failed_num = [failed_num, i];
+    end
 end
 save('data_irregular_cluster','r_js', 'cluster_qlt')
 

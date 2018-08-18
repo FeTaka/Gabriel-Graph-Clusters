@@ -1,4 +1,4 @@
-%% This program is free software;
+ %% This program is free software;
 %% 
 %% 
 %% -*- texinfo -*-
